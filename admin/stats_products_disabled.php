@@ -49,7 +49,7 @@ require('includes/application_top.php');
                                    WHERE p.products_id = pd.products_id
                                    AND pd.language_id = " . (int)$_SESSION['languages_id'] . "
                                    AND p.products_status = 0  
-                                   ORDER BY pd.products_name";
+                                   ORDER BY p.products_quantity DESC";
             $products_split = new splitPageResults($_GET['page'], MAX_DISPLAY_SEARCH_RESULTS_REPORTS, $products_query_raw, $products_query_numrows);
             $products = $db->Execute($products_query_raw);
             foreach ($products as $product) {
