@@ -23,6 +23,6 @@
 define('HEADING_TITLE', 'Disabled Product Report');
 
 define('TABLE_HEADING_NUMBER', 'ID#');
-define('TABLE_HEADING_PRODUCTS', 'Products');
+define('TABLE_HEADING_PRODUCTS', 'Products Name');
 define('TABLE_HEADING_QTY', 'Quantity');
 ?>
