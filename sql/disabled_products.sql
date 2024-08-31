@@ -1,0 +1,1 @@
+INSERT INTO admin_pages (page_key, language_key, main_page, page_params, menu_key, display_on_menu, sort_order) VALUES ('productsDisabled', 'BOX_REPORTS_PRODUCTS_DISABLED', 'FILENAME_PRODUCTS_DISABLED', '', 'reports', 'Y', 500);
