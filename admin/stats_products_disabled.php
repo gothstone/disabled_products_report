@@ -20,11 +20,49 @@
 //  $Id: stats_products_lowstock.php 1969 2005-09-13 06:57:21Z drbyte $
 //
 require('includes/application_top.php');
+
+// -----
+// Determine the current sort-method chosen by the admin user, sorting the list of matching
+// files based on that choice.
+//
+$sort = 'qty_d';
+$sort_description = TEXT_MOST;
+$order_by = 'p.products_quantity DESC';
+if (isset($_GET['sort'])) {
+    $sort = $_GET['sort'];
+    switch ($sort) {
+        case 'id_a':
+            $sort_description = TEXT_LOWEST;
+            $order_by = 'p.products_id ASC';
+            break;
+        case 'id_d':
+            $sort_description = TEXT_HIGHEST;
+            $order_by = 'p.products_id DESC';
+            break;
+        case 'name_a':
+            $sort_description = TEXT_ALPHA;
+            $order_by = 'pd.products_name ASC';
+            break;
+        case 'name_d':
+            $sort_description = TEXT_REVERSE_APLHA;
+            $order_by = 'pd.products_name DESC';
+            break;
+        case 'qty_a':
+            $sort_description = TEXT_LEAST;
+            $order_by = 'p.products_quantity ASC';
+            break;
+        default:
+            $sort = 'qty_d';
+            break;
+    }
+}
+
+
 ?>
 <!doctype html>
 <html <?php echo HTML_PARAMS; ?>>
   <head>
-<?php require DIR_WS_INCLUDES . 'admin_html_head.php'; ?>
+    <?php require DIR_WS_INCLUDES . 'admin_html_head.php'; ?>
   </head>
   <body>
     <!-- header //-->
@@ -36,9 +74,9 @@ require('includes/application_top.php');
       <table class="table table-hover">
         <thead>
           <tr class="dataTableHeadingRow">
-            <th class="dataTableHeadingContent right"><?php echo TABLE_HEADING_NUMBER; ?></th>
-            <th class="dataTableHeadingContent"><?php echo TABLE_HEADING_PRODUCTS; ?></th>
-            <th class="dataTableHeadingContent text-center"><?php echo TABLE_HEADING_QTY; ?></th>
+            <th class="dataTableHeadingContent right"><?php echo TABLE_HEADING_NUMBER; ?><br><a href="<?php echo zen_href_link(FILENAME_PRODUCTS_DISABLED, zen_get_all_get_params(array('sort')) . 'sort=id_a', 'NONSSL'); ?>"><?php echo TEXT_ASC; ?></a>&nbsp;&nbsp;<a href="<?php echo zen_href_link(FILENAME_PRODUCTS_DISABLED, zen_get_all_get_params(array('sort')) . 'sort=id_d', 'NONSSL'); ?>"><?php echo TEXT_DESC; ?></a></th>
+            <th class="dataTableHeadingContent"><?php echo TABLE_HEADING_PRODUCTS; ?><br><a href="<?php echo zen_href_link(FILENAME_PRODUCTS_DISABLED, zen_get_all_get_params(array('sort')) . 'sort=name_a', 'NONSSL'); ?>"><?php echo TEXT_ASC; ?></a>&nbsp;&nbsp;<a href="<?php echo zen_href_link(FILENAME_PRODUCTS_DISABLED, zen_get_all_get_params(array('sort')) . 'sort=name_d', 'NONSSL'); ?>"><?php echo TEXT_DESC; ?></a></th>
+            <th class="dataTableHeadingContent text-center"><?php echo TABLE_HEADING_QTY; ?><br><a href="<?php echo zen_href_link(FILENAME_PRODUCTS_DISABLED, zen_get_all_get_params(array('sort')) . 'sort=qty_a', 'NONSSL'); ?>"><?php echo TEXT_ASC; ?></a>&nbsp;&nbsp;<a href="<?php echo zen_href_link(FILENAME_PRODUCTS_DISABLED, zen_get_all_get_params(array('sort')) . 'sort=qty_d', 'NONSSL'); ?>"><?php echo TEXT_DESC; ?></a></th>
           </tr>
         </thead>
         <tbody>
@@ -49,7 +87,7 @@ require('includes/application_top.php');
                                    WHERE p.products_id = pd.products_id
                                    AND pd.language_id = " . (int)$_SESSION['languages_id'] . "
                                    AND p.products_status = 0  
-                                   ORDER BY p.products_quantity DESC";
+                                   ORDER BY $order_by";
             $products_split = new splitPageResults($_GET['page'], MAX_DISPLAY_SEARCH_RESULTS_REPORTS, $products_query_raw, $products_query_numrows);
             $products = $db->Execute($products_query_raw);
             foreach ($products as $product) {
@@ -72,7 +110,7 @@ require('includes/application_top.php');
       <table class="table">
         <tr>
           <td><?php echo $products_split->display_count($products_query_numrows, MAX_DISPLAY_SEARCH_RESULTS_REPORTS, $_GET['page'], TEXT_DISPLAY_NUMBER_OF_PRODUCTS); ?></td>
-          <td class="text-right"><?php echo $products_split->display_links($products_query_numrows, MAX_DISPLAY_SEARCH_RESULTS_REPORTS, MAX_DISPLAY_PAGE_LINKS, $_GET['page']); ?></td>
+          <td class="text-right"><?php echo $products_split->display_links($products_query_numrows, MAX_DISPLAY_SEARCH_RESULTS_REPORTS, MAX_DISPLAY_PAGE_LINKS, $_GET['page'], "sort=$sort"); ?></td>
         </tr>
       </table>
       <!-- body_text_eof //-->

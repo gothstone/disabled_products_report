@@ -25,4 +25,11 @@ define('HEADING_TITLE', 'Disabled Product Report');
 define('TABLE_HEADING_NUMBER', 'ID#');
 define('TABLE_HEADING_PRODUCTS', 'Products Name');
 define('TABLE_HEADING_QTY', 'Quantity');
+
+define('TEXT_MOST', 'Sorted by Quantity from Most to Least');
+define('TEXT_LEAST', 'Sorted by Quantity from Least to Most');
+define('TEXT_LOWEST', 'Sorted by ID from Lowest to Highest');
+define('TEXT_HIGHEST', 'Sorted by ID from Highest to Lowest');
+define('TEXT_ALPHA', 'Sorted by Name in Alphabetical Order');
+define('TEXT_REVERSE_APLHA', 'Sorted by Name in Reverse Alphabetical Order');
 ?>
